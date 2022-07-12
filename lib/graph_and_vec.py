@@ -26,7 +26,6 @@ class graph:
         # this function is used to rotate a point around (0,0)
         rx=x
         ry=y
-
         rad = angle * math.pi / 180 # math shit
         cosa = math.cos(rad)         # more math shit
         sina = math.sin(rad)          # even more math shit
@@ -34,11 +33,22 @@ class graph:
         y = rx * sina + ry * cosa     # almost done
         return  (x,y)                     # finely
 
-    def draw_vec(self,vec=[0,3],c=(0,0,0)):
+    def draw_vec(self,vec=[0,3],bol=True,c=(0,0,0)):
         x=(round((vec[0]*self.matrix[0])*self.dpu)+round((vec[1]*self.matrix[1])*self.dpu))+self.size[0]      # converding vector to cords on screen
         y=(round((-vec[0]*self.matrix[2])*self.dpu)+round((-vec[1]*self.matrix[3])*self.dpu))+self.size[1]   # same here
         try:
-            pygame.draw.line(self.disp,c,(self.size[0],self.size[1]),(x,y))  #drawing line from (0,0) to the cords
+            if bol:
+                pygame.draw.line(self.disp,c,(self.size[0],self.size[1]),(x,y))  #drawing line from (0,0) to the cords
+        except TypeError:
+            pass
+        return (x,y)
+    
+    def draw_vec2(self,mid_point=(-2,1),vec=[1,3],c=(0,0,0)):
+        xy = self.draw_vec(mid_point,False)
+        x=(round((vec[0]*self.matrix[0])*self.dpu)+round((vec[1]*self.matrix[1])*self.dpu))+xy[0]      # converding vector to cords on screen
+        y=(round((-vec[0]*self.matrix[2])*self.dpu)+round((-vec[1]*self.matrix[3])*self.dpu))+xy[1]   # same here
+        try:
+            pygame.draw.line(self.disp,c,xy,(x,y))  #drawing line from (0,0) to the cords
         except TypeError:
             pass
 
@@ -56,6 +66,19 @@ class graph:
         try:
             pygame.draw.line(self.disp,c2,(xx,yy),(x,y))
             pygame.draw.line(self.disp,c3,(self.size[0],self.size[1]),(x,y))
+        except TypeError:
+            pass
+        return (x,y)
+    
+    def add_vec_draw2(self,vec1=[1,2],vec2=[2,1],c2=(100,100,200)):
+        x=(round((vec1[0]*self.matrix[0])*self.dpu)+round((vec1[1]*self.matrix[1])*self.dpu))+self.size[0]
+        y=(round((-vec1[0]*self.matrix[2])*self.dpu)+round((-vec1[1]*self.matrix[3])*self.dpu))+self.size[1]
+        xx=x
+        yy=y
+        x=(round((vec2[0]*self.matrix[0])*self.dpu)+round((vec2[1]*self.matrix[1])*self.dpu))+xx
+        y=(round((-vec2[0]*self.matrix[2])*self.dpu)+round((-vec2[1]*self.matrix[3])*self.dpu))+yy
+        try:
+            pygame.draw.line(self.disp,c2,(xx,yy),(x,y))
         except TypeError:
             pass
         return (x,y)
@@ -94,4 +117,24 @@ class graph:
         self.draw_vec([-rez[0],0],(200,100,100))
         self.draw_vec([0,rez[1]-1],(100,200,100))
         self.draw_vec([0,-rez[1]],(100,200,100))     
+
+    def bird(self,rez=(15,15)):
+        for x in range(-rez[0],rez[0]):
+            self.draw_vec2([x,rez[1]],[x,-rez[1]])
+        for y in range(-rez[1],rez[1]):
+            self.draw_vec2([rez[0],y],[-rez[0],y])
+
+    def draw_grid2(self,rez=(15,15)):
+        for y in range(-rez[1],rez[1]+1):
+            if y != 0:
+                self.add_vec_draw2([-rez[0],y],[rez[0],0])
+                self.add_vec_draw2([rez[0],y],[-rez[0],0])
+        for x in range(-rez[0],rez[0]+1):
+            if x != 0:
+                self.add_vec_draw2([x,-rez[0]],[0,rez[0]])
+                self.add_vec_draw2([x,rez[0]],[0,-rez[0]])
+        self.draw_vec([rez[0],0],True,(200,100,100))
+        self.draw_vec([-rez[0],0],True,(200,100,100))
+        self.draw_vec([0,rez[1]],True,(100,200,100))
+        self.draw_vec([0,-rez[1]],True,(100,200,100))    
 
