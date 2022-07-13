@@ -2,35 +2,24 @@ from sys import exit
 from lib.graph_and_vec import graph
 from lib.text_box import Text_Box 
 import pygame
+from lib.matrix import Matrix
 
 
+def wait():
+    while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
+        pppp = pygame.event.get()
+        for event in pppp:
+            if event.type == pygame.QUIT:
+                exit()
 
-
-def animated_func(anim,user_text,user_int):
-    if anim:
-        if user_text == '' or user_text == '-' or user_text == '.':
-            if user_int < 0:
-                user_int += (0-user_int)/20
-            if user_int > 0:
-                user_int -= (user_int-0)/20
-        else:
-            if user_int < float(user_text):
-                user_int += (float(user_text)-user_int)/20
-            if user_int > float(user_text):
-                user_int -= (user_int-float(user_text))/20
-    else:
-        if user_text == '' or user_text == '-' or user_text == '.':
-            user_int = 0
-        else:
-            user_int = float(user_text)
-    return user_int
 
 
 if __name__ == "__main__":
     pygame.init()
-    size = width, height = 800, 800
-    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
-    
+    size = width, height = 0, 0
+    screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    size = width, height = screen.get_size()
+    print(size)
     angle = 0
 
     matrix=[1,0,0,1]
@@ -42,23 +31,10 @@ if __name__ == "__main__":
     xpos=0
     ypos=0
     cam_vec=(0,0)
-    
-    i_hat_rot=0
-    j_hat_rot=0
 
-    text_box1=[]
-    text_box1.append(Text_Box(screen,((20,252),(55,292)),3,"40"))
-    text_box1.append(Text_Box(screen,((20,192),(55,232)),3,"0"))
-    text_box1.append(Text_Box(screen,((155,192),(190,232)),3,"0"))
+    rez_text_box = Text_Box(screen,((20,252),(55,292)),3,"40")
 
-    text_box=[]
-    text_box.append(Text_Box(screen,((20,72),(135,112)),11,"1"))
-    text_box.append(Text_Box(screen,((155,72),(270,112)),11,"0"))
-    text_box.append(Text_Box(screen,((20,132),(135,172)),11,"0"))
-    text_box.append(Text_Box(screen,((155,132),(270,172)),11,"1"))
-
-    for tt in text_box:
-        tt.var_change(0)
+    m=Matrix(screen,size)
 
     lfc=False
 
@@ -93,26 +69,13 @@ if __name__ == "__main__":
                dpu += event.y*(dpu/10)
             
             elif event.type == pygame.KEYDOWN:
-                for tt in text_box:
-                    tt.input1(event)
-                
-                for tt in text_box1:
-                    tt.input2(event)
-                #text_box1[0].input2(event)
-                #text_box1[1].input2(event)
-                #text_box1[2].input2(event)
+                m.input(event)             
+                rez_text_box.input1(event)
 
-        for tt in text_box:
-            tt.update1()
-        text_box1[0].update1()
-        text_box1[1].update1()
-        text_box1[2].update1()
-        
-        for tt in text_box:
-            tt.update2()
-        text_box1[0].update2()
-        text_box1[1].update2()
-        text_box1[2].update2()
+        rez_text_box.update1()
+        m.update1()
+        m.update2()
+        rez_text_box.update2()
 
         if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 20 < pygame.mouse.get_pos()[0] < 120 and 22 < pygame.mouse.get_pos()[1] < 62:
             cam_vec=(0,0)
@@ -124,19 +87,11 @@ if __name__ == "__main__":
 
             if animated == True:
                 animated=False
-                while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
-                    pppp = pygame.event.get()
-                    for event in pppp:
-                        if event.type == pygame.QUIT:
-                            exit()
+                wait()
 
             elif animated == False:
                 animated=True
-                while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
-                    pppp = pygame.event.get()
-                    for event in pppp:
-                        if event.type == pygame.QUIT:
-                            exit()
+                wait()
 
 
         if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and lfc == True and pp == False:
@@ -152,49 +107,14 @@ if __name__ == "__main__":
             lfc = False
             pp=True
 
-        for tt in text_box:
-            tt.var_change(animated_func(animated,tt.get(),tt.get_var()))
-
-
-        if text_box1[0].get() == '':
+        if rez_text_box.get() == '':
             rez_t="0"
         else:
-            rez_t=text_box1[0].get()
+            rez_t=rez_text_box.get()
 
-        if text_box1[1].get() == '':
-            i_rot_t="0"
-        else:
-            i_rot_t=text_box1[1].get()
-
-        if text_box1[2].get() == '':
-            j_rot_t="0"
-        else:
-            j_rot_t=text_box1[2].get()
-
-
-        if animated:
-            if int(i_rot_t) < i_hat_rot:
-                i_hat_rot-=1
-            elif int(i_rot_t) > i_hat_rot:
-                i_hat_rot+=1
-        else:
-            if text_box1[1].get()=='':
-                i_hat_rot=0
-            else:
-                i_hat_rot=int(text_box1[1].get())
-
-
-        if animated:
-            if int(j_rot_t) < j_hat_rot:
-                j_hat_rot-=1
-            elif int(j_rot_t) > j_hat_rot:
-                j_hat_rot+=1
-        else:
-            if text_box1[2].get()=='':
-                j_hat_rot=0
-            else:
-                j_hat_rot=int(text_box1[2].get())
-
+        m.update3(animated)
+        
+        mm = m.get_matrix()
 
         g.new_dpu(dpu)
 
@@ -210,12 +130,12 @@ if __name__ == "__main__":
 
         screen.fill((255,255,255))
 
-        g.new_rot((int(i_hat_rot),int(j_hat_rot)))
+        g.new_rot((int(mm[4]),int(mm[5])))
 
 
         matrix=[
-            text_box[0].get_var(),text_box[1].get_var(),
-            text_box[2].get_var(),text_box[3].get_var()
+            mm[0],mm[1],
+            mm[2],mm[3]
             ]
         
             
@@ -225,8 +145,8 @@ if __name__ == "__main__":
         g.draw_grid2((int(rez_t),int(rez_t)))
 
         g.add_vec_draw([2,5],[-4,1])
-        g.draw_vec([4,2])
-        g.draw_vec2()
+        #g.draw_vec([4,2])
+        #g.draw_vec2()
 
         if 20 < pygame.mouse.get_pos()[0] < 120 and 22 < pygame.mouse.get_pos()[1] < 62:
             pygame.draw.rect(screen,[200,200,200],[20,22,100,40])
@@ -242,11 +162,9 @@ if __name__ == "__main__":
             pygame.draw.rect(screen,[100,100,180],[animated_c[0][0],animated_c[0][1],animated_c[1][0]-animated_c[0][0],animated_c[1][1]-animated_c[0][1]])
 
 
-        for tt in text_box:
-            tt.show((5,10))
-        text_box1[0].show((2,10))
-        text_box1[1].show((2,10))
-        text_box1[2].show((2,10))
+        rez_text_box.show((2,10))
+        m.show()
+
         pygame.display.flip()
         clock.tick(60)
         

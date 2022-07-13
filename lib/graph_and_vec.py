@@ -42,15 +42,6 @@ class graph:
         except TypeError:
             pass
         return (x,y)
-    
-    def draw_vec2(self,mid_point=(-2,1),vec=[1,3],c=(0,0,0)):
-        xy = self.draw_vec(mid_point,False)
-        x=(round((vec[0]*self.matrix[0])*self.dpu)+round((vec[1]*self.matrix[1])*self.dpu))+xy[0]      # converding vector to cords on screen
-        y=(round((-vec[0]*self.matrix[2])*self.dpu)+round((-vec[1]*self.matrix[3])*self.dpu))+xy[1]   # same here
-        try:
-            pygame.draw.line(self.disp,c,xy,(x,y))  #drawing line from (0,0) to the cords
-        except TypeError:
-            pass
 
     def add_vec_draw(self,vec1=[1,2],vec2=[2,1],c1=((100,100,200)),c2=(200,100,100),c3=((100,200,100))):
         x=(round((vec1[0]*self.matrix[0])*self.dpu)+round((vec1[1]*self.matrix[1])*self.dpu))+self.size[0]
