@@ -1,7 +1,7 @@
 import pygame
-
+#comic sans
 class Text_Box:
-    def __init__(self,screen,cords,m_length,start_text='',font='comic sans',font_size=16):
+    def __init__(self,screen,cords,m_length,start_text='',font='Agency FB',font_size=16):
         self.screen = screen
         self.cords = cords
         self.text = start_text
@@ -58,34 +58,10 @@ class Text_Box:
         pygame.draw.rect(self.screen,b_c,[self.cords[0][0],self.cords[0][1],self.cords[1][0]-self.cords[0][0],self.cords[1][1]-self.cords[0][1]])
         text = self.font.render(self.text , True ,[0,0,0])
         self.screen.blit(text ,(font_cort[0]+self.cords[0][0],(font_cort[1]+self.cords[0][1])))
+        self.screen.blit(text ,((font_cort[0]+self.cords[0][0]+1),(font_cort[1]+self.cords[0][1])))
+        self.screen.blit(text ,(font_cort[0]+self.cords[0][0],((font_cort[1]+self.cords[0][1])+1)))
+        #self.screen.blit(text ,((font_cort[0]+self.cords[0][0]+1),((font_cort[1]+self.cords[0][1])+1)))
         if self.clicked:
             pygame.draw.rect(self.screen,s_c,[self.cords[0][0],self.cords[0][1],self.cords[1][0]-self.cords[0][0],self.cords[1][1]-self.cords[0][1]],2)
         else:
             pygame.draw.rect(self.screen,ns_c,[self.cords[0][0],self.cords[0][1],self.cords[1][0]-self.cords[0][0],self.cords[1][1]-self.cords[0][1]],2)
-
-
-if __name__ == "__main__":
-    pygame.init()
-    size = width, height = 800, 800
-    screen = pygame.display.set_mode(size)
-    t=[]
-    t.append(Text_Box(screen,((0,0),(100,40)),9))
-    t.append(Text_Box(screen,((120,0),(220,40)),9))
-    t.append(Text_Box(screen,((0,50),(100,90)),9))
-    t.append(Text_Box(screen,((120,50),(220,90)),9))
-    #t.append(text_box(screen,((120,50),(220,90)),9))
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
-            if event.type == pygame.KEYDOWN:
-                for tt in t:
-                    tt.input1(event)
-        for tt in t:
-            tt.update1()
-        for tt in t:
-            tt.update2()
-        screen.fill((255,255,255))
-        for tt in t:
-            tt.show((5,10))
-        pygame.display.flip()

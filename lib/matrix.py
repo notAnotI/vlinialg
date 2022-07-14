@@ -1,7 +1,6 @@
 from lib.text_box import Text_Box
 import pygame
 
-
 def animated_func(anim,user_text,user_int):
     if anim:
         if user_text == '' or user_text == '-' or user_text == '.':
@@ -15,7 +14,7 @@ def animated_func(anim,user_text,user_int):
             if user_int > float(user_text):
                 user_int -= (user_int-float(user_text))/20
     else:
-        if user_text == '' or user_text == '-' or user_text == '.':
+        if user_text == '' or user_text == '-' or user_text == '.' or user_text == '-.':
             user_int = 0
         else:
             user_int = float(user_text)
@@ -38,22 +37,24 @@ def animated_func2(animated,text_box,rot):
         else:
             rot=int(text_box)
     return rot
-
+    
 class Matrix:
     def __init__(self,screen,size):
-            self.size = size
-            self.screen = screen
-            self.text_box=[]
-            self.text_box.append(Text_Box(screen,((20,72),(135,112)),11,"1"))    #[0]    
-            self.text_box.append(Text_Box(screen,((155,72),(270,112)),11,"0"))  #[1]         [0][1]
-            self.text_box.append(Text_Box(screen,((20,132),(135,172)),11,"0"))  #[2]         [2][3]
-            self.text_box.append(Text_Box(screen,((155,132),(270,172)),11,"1")) #[3]
+        self.size = size
+        self.screen = screen
+        self.text_box=[]
+        self.text_box.append(Text_Box(screen,((95,size[1]-112),(142,size[1]-72)),6,"1"))  #[0]         
+        self.text_box.append(Text_Box(screen,((95,size[1]-172),(142,size[1]-132)),6,"0")) #[1]    [1][3]
+        self.text_box.append(Text_Box(screen,((20,size[1]-112),(67,size[1]-72)),6,"0"))    #[2]    [0][2]
+        self.text_box.append(Text_Box(screen,((20,size[1]-172),(67,size[1]-132)),6,"1"))  #[3]         
+        
+        self.text_box.append(Text_Box(screen,((20,size[1]-62),(55,size[1]-22)),3,"0"))     #[4]       [4][5]
+        self.text_box.append(Text_Box(screen,((105,size[1]-62),(140,size[1]-22)),3,"0"))  #[5]
 
-            self.text_box.append(Text_Box(screen,((20,192),(55,232)),3,"0"))     #[4]         [4][5]
-            self.text_box.append(Text_Box(screen,((155,192),(190,232)),3,"0"))  #[5]
+        for t in self.text_box:
+            t.var_change(0)
 
-            for t in self.text_box:
-                t.var_change(0)
+        self.activate = False
     
     def input(self, event):
         self.text_box[0].input1(event)
@@ -70,9 +71,30 @@ class Matrix:
         return pp
 
     def update2(self):
-        for t in self.text_box:
-            pp = t.update2()
-        return pp
+        pp2 = False
+        pp = False
+        if self.activate:
+            for t in self.text_box:
+                pp1 = t.update2()
+                if pp1:
+                    pp2 = True
+                    pp = True
+            if not pp2:
+                pp = False
+                if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 140 < pygame.mouse.get_pos()[0] < 160 and self.size[1]-198 < pygame.mouse.get_pos()[1] < self.size[1]-178:
+                    while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
+                        pppp = pygame.event.get()
+                    self.activate = False
+                    pp = True
+            return pp
+
+        else:
+            if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and -1 < pygame.mouse.get_pos()[0] < 25 and self.size[1]-200 < pygame.mouse.get_pos()[1] < self.size[1]:
+                while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
+                    pppp = pygame.event.get()
+                self.activate = True
+                return True
+            return False
     
     def update3(self,animated):
         self.text_box[0].var_change(animated_func(animated,self.text_box[0].get(),self.text_box[0].get_var()))
@@ -90,37 +112,21 @@ class Matrix:
         return x
     
     def show(self):
-        self.text_box[0].show((5,10))	
-        self.text_box[1].show((5,10))	
-        self.text_box[2].show((5,10))	
-        self.text_box[3].show((5,10))	
+        if self.activate:
+            pygame.draw.rect(self.screen,(250,250,250),(0,self.size[1]-200,162,200))
+            pygame.draw.rect(self.screen,(0,0,0),(-5,self.size[1]-200,167,205),2)
+            pygame.draw.rect(self.screen,(200,200,200),(140,self.size[1]-198,20,20))
 
-        self.text_box[4].show((2,10))	
-        self.text_box[5].show((2,10))	
+            pygame.draw.line(self.screen,(0,0,0),(139,self.size[1]-179),(160,self.size[1]-179),2)
+            pygame.draw.line(self.screen,(0,0,0),(139,self.size[1]-179),(139,self.size[1]-199),2)
 
-if __name__ == '__main__':
-    pygame.init()
-    size = width, height = 0, 0
-    screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-    size = width, height = screen.get_size()
-    m = Matrix(screen, size)
-    while True:
-        pp=False
-        pppp = pygame.event.get()
-        for event in pppp:
-            if event.type == pygame.QUIT:
-                exit()
-            if event.type == pygame.KEYDOWN:
-                m.input(event)
-        screen.fill((255,255,255))
-
-        if not pp:
-            pp = m.update1()
-        if not pp:
-            pp = m.update2()
-        m.update3(True)
-        m.get_matrix()
-
-        m.show()
-
-        pygame.display.flip()
+            pygame.draw.line(self.screen,(0,0,0),(140,self.size[1]-189),(150,self.size[1]-199),3)
+            pygame.draw.line(self.screen,(0,0,0),(140,self.size[1]-189),(150,self.size[1]-179),3)
+            pygame.draw.line(self.screen,(0,0,0),(150,self.size[1]-189),(160,self.size[1]-199),3)
+            pygame.draw.line(self.screen,(0,0,0),(150,self.size[1]-189),(160,self.size[1]-179),3)
+            #pygame.draw.line(self.screen,(0,0,0),(0,self.size[1]-200),(162,self.size[1]-200),2)
+            for t in self.text_box:
+                t.show((2,10))
+        else:
+            pygame.draw.rect(self.screen,(255,250,250),(0,self.size[1]-200,20,200))
+            pygame.draw.rect(self.screen,(0,0,0),(-5,self.size[1]-200,25,205),2)

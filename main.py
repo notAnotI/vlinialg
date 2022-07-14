@@ -19,8 +19,6 @@ if __name__ == "__main__":
     size = width, height = 0, 0
     screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     size = width, height = screen.get_size()
-    print(size)
-    angle = 0
 
     matrix=[1,0,0,1]
 
@@ -32,18 +30,15 @@ if __name__ == "__main__":
     ypos=0
     cam_vec=(0,0)
 
-    rez_text_box = Text_Box(screen,((20,252),(55,292)),3,"40")
+    rez_text_box = Text_Box(screen,((20,252),(55,292)),4,"40")
 
     m=Matrix(screen,size)
 
     lfc=False
-
     last_corts=(400,400)
 
     animated=False
     animated_c=((155,22),(255,62))
-    smallfont = pygame.font.SysFont('comic sans',16)
-    text = smallfont.render('reset cam' , True ,[0,0,0])
     while True:
         pp=False
         pppp = pygame.event.get()
@@ -138,10 +133,7 @@ if __name__ == "__main__":
             mm[2],mm[3]
             ]
         
-            
         g.new_matrix(matrix)
-        angle = (angle+1)%360
-
         g.draw_grid2((int(rez_t),int(rez_t)))
 
         g.add_vec_draw([2,5],[-4,1])
@@ -152,7 +144,7 @@ if __name__ == "__main__":
             pygame.draw.rect(screen,[200,200,200],[20,22,100,40])
         else:
             pygame.draw.rect(screen,[150,150,150],[20,22,100,40])
-        screen.blit(text , (25,27))
+        
 #my cat typed this
 #wsEDXCRFzszaxdwe+
 
