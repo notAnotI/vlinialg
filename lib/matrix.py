@@ -65,6 +65,11 @@ class Matrix:
         self.text_box[4].input2(event)
         self.text_box[5].input2(event)
 
+    def new_screen(self,screen):
+        for t in self.text_box:
+            t.new_screen(screen)
+        self.screen = screen
+
     def update1(self):
         for t in self.text_box:
             pp = t.update1()

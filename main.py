@@ -3,6 +3,8 @@ from lib.graph_and_vec import graph
 from lib.text_box import Text_Box 
 import pygame
 from lib.matrix import Matrix
+from lib.tr_menu import TR_menu
+import keyboard
 
 
 def wait():
@@ -30,9 +32,10 @@ if __name__ == "__main__":
     ypos=0
     cam_vec=(0,0)
 
-    rez_text_box = Text_Box(screen,((20,252),(55,292)),4,"40")
+    rez_text_box = Text_Box(screen,((20,252),(45,292)),3,"40")
 
     m=Matrix(screen,size)
+    tr_menu = TR_menu(screen)
 
     lfc=False
     last_corts=(400,400)
@@ -40,11 +43,16 @@ if __name__ == "__main__":
     animated=False
     animated_c=((155,22),(255,62))
     while True:
+        size = width, height = 0, 0
+        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+        size = width, height = screen.get_size()
         pp=False
         pppp = pygame.event.get()
         for event in pppp:
             if event.type == pygame.QUIT:
                 exit()
+            
+            '''
             elif event.type == pygame.VIDEORESIZE:
                 width, height = event.dict["size"]
                 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
@@ -59,8 +67,11 @@ if __name__ == "__main__":
             elif event.type == 32777:
                 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
                 t_center_pos = [width // 2, height // 2]
+            '''
+            
+            
 
-            elif event.type == pygame.MOUSEWHEEL:
+            if event.type == pygame.MOUSEWHEEL:
                dpu += event.y*(dpu/10)
             
             elif event.type == pygame.KEYDOWN:
@@ -71,12 +82,12 @@ if __name__ == "__main__":
         m.update1()
         m.update2()
         rez_text_box.update2()
-
+        pp = tr_menu.update()
         if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 20 < pygame.mouse.get_pos()[0] < 120 and 22 < pygame.mouse.get_pos()[1] < 62:
             cam_vec=(0,0)
             dpu=40
             pp = True
-        
+
         if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and animated_c[0][0] < pygame.mouse.get_pos()[0] < animated_c[1][0] and animated_c[0][1] < pygame.mouse.get_pos()[1] < animated_c[1][1]:
             pp=True
 
@@ -88,16 +99,17 @@ if __name__ == "__main__":
                 animated=True
                 wait()
 
-
-        if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and lfc == True and pp == False:
+        if (pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) or pygame.mouse.get_pressed(num_buttons=3) == (False, False,True) or pygame.mouse.get_pressed(num_buttons=3) == (True, False,True)) and lfc == True and pp == False:
             cam_vec=(cam_vec[0]+((pygame.mouse.get_pos()[0]-(last_corts[0]))/dpu),(cam_vec[1]+((pygame.mouse.get_pos()[1]-(last_corts[1]))/dpu)))
             pp=True
             last_corts=pygame.mouse.get_pos()
 
-        if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and lfc == False and pp == False:
+
+        if (pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) or pygame.mouse.get_pressed(num_buttons=3) == (False, False,True) or pygame.mouse.get_pressed(num_buttons=3) == (True, False,True)) and lfc == False and pp == False:
             lfc = True
             last_corts=pygame.mouse.get_pos()
             pp=True
+        
         if lfc == True and pp == False:
             lfc = False
             pp=True
@@ -127,7 +139,6 @@ if __name__ == "__main__":
 
         g.new_rot((int(mm[4]),int(mm[5])))
 
-
         matrix=[
             mm[0],mm[1],
             mm[2],mm[3]
@@ -156,7 +167,7 @@ if __name__ == "__main__":
 
         rez_text_box.show((2,10))
         m.show()
-
+        tr_menu.show()
         pygame.display.flip()
         clock.tick(60)
         

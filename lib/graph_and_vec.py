@@ -6,6 +6,9 @@ class graph:
         # asining variables
         self.disp,self.matrix,self.dpu,self.size,self.rot,self.t_matrix = disp,matrix,dpu,size,rot,matrix
         self.new_rot(self.rot)
+
+    def new_screen(self,screen):
+        self.screen = screen
     
     def new_matrix(self,matrix):
         # reasining variable matrix

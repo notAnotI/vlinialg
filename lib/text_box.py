@@ -53,6 +53,9 @@ class Text_Box:
 
     def get_var(self):
         return self.var
+        
+    def new_screen(self,screen):
+        self.screen = screen
 
     def show(self,font_cort,b_c=[255,255,255],s_c=[100,150,100],ns_c=[100,100,100]):
         pygame.draw.rect(self.screen,b_c,[self.cords[0][0],self.cords[0][1],self.cords[1][0]-self.cords[0][0],self.cords[1][1]-self.cords[0][1]])
