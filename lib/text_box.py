@@ -9,6 +9,9 @@ class Text_Box:
         self.clicked = False
         self.m_length = m_length
     
+    def new_cords(self,cords):
+        self.cords = cords
+
     def input1(self,event):
         if self.clicked:
            if event.key == pygame.K_BACKSPACE:

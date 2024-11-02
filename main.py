@@ -18,8 +18,8 @@ def wait():
 
 if __name__ == "__main__":
     pygame.init()
-    size = width, height = 0, 0
-    screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    size = width, height = 500, 500
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE)
     size = width, height = screen.get_size()
 
     matrix=[1,0,0,1]
@@ -43,16 +43,14 @@ if __name__ == "__main__":
     animated=False
     animated_c=((155,22),(255,62))
     while True:
-        size = width, height = 0, 0
-        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-        size = width, height = screen.get_size()
+
         pp=False
         pppp = pygame.event.get()
         for event in pppp:
             if event.type == pygame.QUIT:
                 exit()
             
-            '''
+           
             elif event.type == pygame.VIDEORESIZE:
                 width, height = event.dict["size"]
                 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
@@ -60,14 +58,15 @@ if __name__ == "__main__":
                 g.resize(center_pos)
             elif event.type == pygame.WINDOWMAXIMIZED:
                 WSIZE = (0,0)
-                flags = pygame.FULLSCREEN
-                screen = pygame.display.set_mode(WSIZE, flags)
+                #flags = pygame.FULLSCREEN
+                #screen = pygame.display.set_mode(WSIZE, flags)
+                pygame.display.toggle_fullscreen()
                 width, height = screen.get_size()
                 t_center_pos = [width // 2, height // 2]
             elif event.type == 32777:
                 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
                 t_center_pos = [width // 2, height // 2]
-            '''
+           
             
             
 
@@ -80,9 +79,10 @@ if __name__ == "__main__":
 
         rez_text_box.update1()
         m.update1()
-        m.update2()
+        if not pp: pp=m.update2()
         rez_text_box.update2()
-        pp = tr_menu.update()
+        if not pp: pp = tr_menu.update()
+
         if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 20 < pygame.mouse.get_pos()[0] < 120 and 22 < pygame.mouse.get_pos()[1] < 62:
             cam_vec=(0,0)
             dpu=40
@@ -132,9 +132,10 @@ if __name__ == "__main__":
 
         center_pos[0]=xpos
         center_pos[1]=-ypos
-
+        
+        
         g.resize(center_pos)
-
+ 
         screen.fill((255,255,255))
 
         g.new_rot((int(mm[4]),int(mm[5])))
@@ -145,7 +146,7 @@ if __name__ == "__main__":
             ]
         
         g.new_matrix(matrix)
-        g.draw_grid2((int(rez_t),int(rez_t)))
+        g.draw_grid2([int(rez_t),int(rez_t)])
 
         g.add_vec_draw([2,5],[-4,1])
         #g.draw_vec([4,2])

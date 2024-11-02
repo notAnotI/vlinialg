@@ -71,6 +71,13 @@ class Matrix:
         self.screen = screen
 
     def update1(self):
+        self.size = self.screen.get_size()
+        self.text_box[3].new_cords(((95,self.size[1]-112),(142,self.size[1]-72)))
+        self.text_box[1].new_cords(((95,self.size[1]-172),(142,self.size[1]-132)))
+        self.text_box[2].new_cords(((20,self.size[1]-112),(67,self.size[1]-72)))
+        self.text_box[0].new_cords(((20,self.size[1]-172),(67,self.size[1]-132)))
+        self.text_box[4].new_cords(((20,self.size[1]-62),(55,self.size[1]-22)))
+        self.text_box[5].new_cords(((105,self.size[1]-62),(140,self.size[1]-22)))
         for t in self.text_box:
             pp = t.update1()
         return pp
@@ -78,20 +85,22 @@ class Matrix:
     def update2(self):
         pp2 = False
         pp = False
+
         if self.activate:
-            for t in self.text_box:
-                pp1 = t.update2()
-                if pp1:
-                    pp2 = True
-                    pp = True
-            if not pp2:
-                pp = False
-                if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 140 < pygame.mouse.get_pos()[0] < 160 and self.size[1]-198 < pygame.mouse.get_pos()[1] < self.size[1]-178:
-                    while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
-                        pppp = pygame.event.get()
-                    self.activate = False
-                    pp = True
-            return pp
+            if pygame.mouse.get_pos()[0] < 162 and pygame.mouse.get_pos()[1] > self.size[1]-200 and pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
+                for t in self.text_box:
+                    pp1 = t.update2()
+                    if pp1:
+                        pp2 = True
+                        pp = True
+                if not pp2:
+                    pp = False
+                    if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and 140 < pygame.mouse.get_pos()[0] < 160 and self.size[1]-198 < pygame.mouse.get_pos()[1] < self.size[1]-178:
+                        while pygame.mouse.get_pressed(num_buttons=3) == (True, False,False):
+                            pppp = pygame.event.get()
+                        self.activate = False
+                        pp = True
+                return True
 
         else:
             if pygame.mouse.get_pressed(num_buttons=3) == (True, False,False) and -1 < pygame.mouse.get_pos()[0] < 25 and self.size[1]-200 < pygame.mouse.get_pos()[1] < self.size[1]:

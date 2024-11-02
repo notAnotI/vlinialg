@@ -82,8 +82,8 @@ class graph:
 
 
     def draw_grid(self,rez=(15,15)):
-        for y in range(-rez[1],rez[1]):
-            for x in range(-rez[0],rez[0]):
+        for y in range(-rez[1],rez[1],step):
+            for x in range(-rez[0],rez[0], step):
                 xy=((round((x*self.matrix[0])*self.dpu)+round((y*self.matrix[1])*self.dpu))+self.size[0],(round((-x*self.matrix[2])*self.dpu)+round((-y*self.matrix[3])*self.dpu))+self.size[1])
                 try:
                     try:
@@ -95,8 +95,8 @@ class graph:
                 yx=xy
             del yx
 
-        for x in range(-rez[0],rez[0]):
-            for y in range(-rez[1],rez[1]):
+        for x in range(-rez[0],rez[0], step):
+            for y in range(-rez[1],rez[1], step):
                 xy=((round((x*self.matrix[0])*self.dpu)+round((y*self.matrix[1])*self.dpu))+self.size[0],(round((-x*self.matrix[2])*self.dpu)+round((-y*self.matrix[3])*self.dpu))+self.size[1])
                 try:
                     try:
@@ -118,12 +118,18 @@ class graph:
         for y in range(-rez[1],rez[1]):
             self.draw_vec2([rez[0],y],[-rez[0],y])
 
-    def draw_grid2(self,rez=(15,15)):
-        for y in range(-rez[1],rez[1]+1):
+    def draw_grid2(self,rez=[150,150]):
+        step = int(10/self.dpu)
+        if step == 0:
+            step = 1
+            #if step > 20: step = 20
+        rez[0]=rez[0]//step*step
+        rez[1]=rez[1]//step*step
+        for y in range(-rez[1],rez[1]+1, step):
             if y != 0:
                 self.add_vec_draw2([-rez[0],y],[rez[0],0])
                 self.add_vec_draw2([rez[0],y],[-rez[0],0])
-        for x in range(-rez[0],rez[0]+1):
+        for x in range(-rez[0],rez[0]+1, step):
             if x != 0:
                 self.add_vec_draw2([x,-rez[0]],[0,rez[0]])
                 self.add_vec_draw2([x,rez[0]],[0,-rez[0]])

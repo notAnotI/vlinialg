@@ -11,8 +11,10 @@ class TR_menu:
     
     def new_screen(self,screen):
         self.screen = screen
+    
 
     def update(self):
+        self.size = self.screen.get_size()
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed(num_buttons=3) == (True, False,False)
         if self.size[0]-80 < mouse[0] < self.size[0]-40 and -1 < mouse[1] < 40:
@@ -21,8 +23,8 @@ class TR_menu:
                 global screen
                 screen = pygame.display.set_mode((1,1), pygame.RESIZABLE)
                 pygame.display.flip()
-                keyboard.press("windows+down arrow")
-                keyboard.release("windows+down arrow")
+                keyboard.press_and_release("windows+down arrow")
+                #keyboard.release("windows+down arrow")
                 
                 max = False
                 while not max:
